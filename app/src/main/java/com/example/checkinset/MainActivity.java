@@ -1,5 +1,6 @@
 package com.example.checkinset;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -97,8 +98,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     private static final String KEY_LAST_SHOWN = "donation_last_shown";
 
     private UpdateChecker checker;
-
-    private PointModel lastPoint = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -450,6 +449,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     /**
      * Zeigt ein Bild samt Überschrift und Punkten.
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void addImageToUI(ImageModel imageModel) {
         final long[] lastTapTime = {0}; // Array, um eine mutable Variable zu haben
         String imagePath = protectedViewOn ? imageModel.cartoonImagePath : imageModel.originalImagePath ;
@@ -547,10 +547,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 refreshAllPoints();
             }
         });
-
         layoutToImageMap.put(customLayout, imageModel);
-
-
 
     }
 
@@ -570,19 +567,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         addImageToUI(newImg);
         DataStorage.saveData(this, dataModel);
     }
-
-//    @Override
-//    public void onImagePicked(String imagePath) {
-//        ImageModel newImg = new ImageModel();
-//        newImg.originalImagePath = imagePath;
-//        newImg.cartoonImagePath = cartoonPath;
-//        newImg.title = (currentImageTitle != null && !currentImageTitle.isEmpty())
-//                ? currentImageTitle
-//                : "Gallery image";
-//        dataModel.images.add(newImg);
-//        addImageToUI(newImg);
-//        DataStorage.saveData(this, dataModel);
-//    }
 
     @Override
     public void onError(String errorMessage) {
@@ -666,7 +650,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     }
 
 
-
     private long getDaysDifference(String timestamp) {
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -679,25 +662,22 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         }
     }
 
-    /**
-     * Ermittelt den Punkt, der den angegebenen x- und y-Prozentwerten am nächsten liegt.
-     *
-     * @param imageModel Das ImageModel, in dem die Punkte gespeichert sind.
-     * @param xPercent   Der x-Wert (0..1), an dem gesucht wird.
-     * @param yPercent   Der y-Wert (0..1), an dem gesucht wird.
-     * @return Der am nächsten liegende Punkt oder null, falls keine Punkte vorhanden.
-     */
     private PointModel getClosestPoint(ImageModel imageModel, float xPercent, float yPercent) {
         PointModel closestPoint = null;
         double minDistance = Double.MAX_VALUE;
+        int labelFadedDays = SettingsManager.getlabelFadedDaysOff(this);; // Ab wieviel Tagen soll das Label ausgeblendet werden?
+        long daysDifference = 0;
 
         for (PointModel point : imageModel.points) {
-            double dx = xPercent - point.xPercent;
-            double dy = yPercent - point.yPercent;
-            double distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestPoint = point;
+            daysDifference = getDaysDifference(point.timestamp);
+            if ((daysDifference <= labelFadedDays) || historyViewOn) { // Nur Punkte berücksichtigen, deren Label sichtbar ist
+                double dx = xPercent - point.xPercent;
+                double dy = yPercent - point.yPercent;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestPoint = point;
+                }
             }
         }
         return closestPoint;
@@ -710,8 +690,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             return;
         }
 
-        boolean pointChanged = (lastPoint != point);
-
         // Zuerst alle Punkte auf den Standardradius zurücksetzen
         refreshAllPoints();
 
@@ -720,12 +698,10 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             return;
         }
 
-        //Set Bottom Sheet Values
-
         //Set Days old
         tvCircleNumber.setText(String.valueOf(getDaysDifference(point.timestamp)));
 
-        // Kreisfarbe
+        // Color top Point in bottom sheet
         GradientDrawable bgDrawable = (GradientDrawable) tvCircleNumber.getBackground();
         if (point.mark <= 1) {
             bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundGreen));
@@ -757,15 +733,20 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         currentPoint = point;
         currentLayout = layout;
 
-        // Punkt-View finden und Kreis einfärben:
-        View pointView = getPointView(layout, point);
-        if (pointView != null) {
-            View circle = pointView.findViewById(R.id.point_circle);
-            TextView label = pointView.findViewById(R.id.point_label);
-            setCircleBackground(circle, ContextCompat.getColor(this, R.color.colorBackgroundLight), 255,0);
-            label.setTextColor(ContextCompat.getColor(this, R.color.DarkColor1));
+        View wrapper = (View) layout.findViewWithTag(currentPoint);
+        if (!(wrapper == null)) {
+            // Find circle view
+            View circle = wrapper.findViewById(R.id.point_circle);
+            int strokeWidthDp = 2;
+            GradientDrawable gd = new GradientDrawable();
+            gd.setShape(GradientDrawable.OVAL);
+            float density = getResources().getDisplayMetrics().density;
+            int strokeWidthPx = (int) (strokeWidthDp * density + 0.5f);
+            gd.setStroke(strokeWidthPx, ContextCompat.getColor(this, R.color.white));
+            //Get background color of circle
+            gd.setColor(bgDrawable.getColor());
+            circle.setBackground(gd);
         }
-
 
         if (waveAnimator != null) {
             waveAnimator.stop();
@@ -782,30 +763,19 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 actualY,
                 sizePx,
                 Color.WHITE,
-                0.5f,
+                0.8f,
                 3f
         );
         waveAnimator.start();
-
-        // Aktuellen Punkt/Layout merken
-        lastPoint = point;
-    }
-
-    private View getPointView(CustomImageLayout layout, PointModel point) {
-        for (int i = 0; i < layout.getChildCount(); i++) {
-            View child = layout.getChildAt(i);
-            if (child.getTag() instanceof PointModel) {
-                PointModel taggedPoint = (PointModel) child.getTag();
-                if (taggedPoint == point) {
-                    return child;
-                }
-            }
-        }
-        return null;
     }
 
     //Modifiy design of all points on images (NOT Bottom Sheet)
     private void refreshAllPoints() {
+
+        if (waveAnimator != null) {
+            waveAnimator.stop();
+        }
+
         int strokeColor = android.R.color.transparent;
         float strokeWidthDp = 0;
         int alphaHistory = 255;
