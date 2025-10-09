@@ -27,8 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.*;
-
-import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -578,26 +576,23 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         showCoffeeDonationSnackbar(coordinator);
     }
 
-    OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-        @Override
-        public void handleOnBackPressed() {
-            // Deine alte Logik
-            int state = bottomSheetBehavior.getState();
-            if (state == BottomSheetBehavior.STATE_EXPANDED
-                    || state == BottomSheetBehavior.STATE_HALF_EXPANDED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                refreshAllPoints();
-                return;
-                // hier nicht weiterleiten -> Back wurde behandelt
-            } else {
-                // Nicht behandelt: temporär deaktivieren und System die Back-Action ausführen lassen
-                setEnabled(false);
-                MainActivity.this.getOnBackPressedDispatcher().onBackPressed();
-                // optional wieder aktivieren (Lifecycle macht das meist automatisch)
-                setEnabled(true);
-            }
+    @Override
+    public void onBackPressed() {
+        if (bottomSheetBehavior == null) {
+            super.onBackPressed();
+            return;
         }
-    };
+        int state = bottomSheetBehavior.getState();
+        // Use logical OR (||) and handle the HIDDEN state for a better UX.
+        if (state == BottomSheetBehavior.STATE_EXPANDED
+                || state == BottomSheetBehavior.STATE_HALF_EXPANDED
+                || state == BottomSheetBehavior.STATE_HIDDEN) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            refreshAllPoints();
+            return; // Prevent the activity/fragment from closing.
+        }
+        super.onBackPressed();
+    }
 
     private void createPoint(CustomImageLayout layout, float xPercent, float yPercent) {
         ImageModel imgModel = layoutToImageMap.get(layout);
