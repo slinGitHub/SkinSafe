@@ -12,7 +12,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import android.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 // Erwartetes Format: "yyyy-MM-dd HH:mm:ss"
                 String timestamp = currentPoint.timestamp;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                Date date = null;
+                Date date;
                 try {
                     date = sdf.parse(timestamp);
                 } catch (ParseException e) {
@@ -223,9 +223,9 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             });
         });
 
-        ratingBtnGreen.setOnClickListener(v -> selectRating(1,true, ratingBtnGreen, R.drawable.ic_circle_selected_green, R.color.circleBackgroundGreen, ratingBtnYellow, ratingBtnRed));
-        ratingBtnYellow.setOnClickListener(v -> selectRating(2,true, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, R.color.circleBackgroundYellow, ratingBtnGreen, ratingBtnRed));
-        ratingBtnRed.setOnClickListener(v -> selectRating(3,true, ratingBtnRed, R.drawable.ic_circle_selected_red, R.color.circleBackgroundRed, ratingBtnGreen, ratingBtnYellow));
+        ratingBtnGreen.setOnClickListener(v -> selectRating(1,true, ratingBtnGreen, R.drawable.ic_circle_selected_green, ratingBtnYellow, ratingBtnRed));
+        ratingBtnYellow.setOnClickListener(v -> selectRating(2,true, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, ratingBtnGreen, ratingBtnRed));
+        ratingBtnRed.setOnClickListener(v -> selectRating(3,true, ratingBtnRed, R.drawable.ic_circle_selected_red, ratingBtnGreen, ratingBtnYellow));
 
         pointNotes.addTextChangedListener(new TextWatcher() {
             @Override
@@ -664,7 +664,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     private PointModel getClosestPoint(ImageModel imageModel, float xPercent, float yPercent) {
         PointModel closestPoint = null;
         double minDistance = Double.MAX_VALUE;
-        int labelFadedDays = SettingsManager.getlabelFadedDaysOff(this);; // Ab wieviel Tagen soll das Label ausgeblendet werden?
+        int labelFadedDays = SettingsManager.getlabelFadedDaysOff(this); // Ab wieviel Tagen soll das Label ausgeblendet werden?
         long daysDifference;
 
         for (PointModel point : imageModel.points) {
@@ -705,15 +705,15 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         if (point.mark <= 1) {
             bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundGreen));
             tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontGreen));
-            selectRating(1,false, ratingBtnGreen, R.drawable.ic_circle_selected_green, R.color.circleBackgroundGreen, ratingBtnYellow, ratingBtnRed);
+            selectRating(1,false, ratingBtnGreen, R.drawable.ic_circle_selected_green,  ratingBtnYellow, ratingBtnRed);
         } else if (point.mark == 2) {
             bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundYellow));
             tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontYellow));
-            selectRating(2,false, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, R.color.circleBackgroundYellow, ratingBtnGreen, ratingBtnRed);
+            selectRating(2,false, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, ratingBtnGreen, ratingBtnRed);
         } else {
             bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundRed));
             tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontRed));
-            selectRating(3,false, ratingBtnRed, R.drawable.ic_circle_selected_red, R.color.circleBackgroundRed, ratingBtnGreen, ratingBtnYellow);
+            selectRating(3,false, ratingBtnRed, R.drawable.ic_circle_selected_red, ratingBtnGreen, ratingBtnYellow);
         }
 
         // Setze Text für den ausgewählten Punkt
@@ -775,12 +775,10 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             waveAnimator.stop();
         }
 
-        int strokeColor = android.R.color.transparent;
         float strokeWidthDp = 0;
         int alphaHistory = 255;
-        int labelFadedDays = SettingsManager.getlabelFadedDaysOff(this);; // Ab wieviel Tagen soll das Label ausgeblendet werden?
+        int labelFadedDays = SettingsManager.getlabelFadedDaysOff(this); // Ab wieviel Tagen soll das Label ausgeblendet werden?
         int labelOffDays = SettingsManager.getDaysForLabelOff(this);
-        int maxPoints = SettingsManager.getMaxPointsHistory(this);
 
         // Über alle Bilder gehen
         for (Map.Entry<CustomImageLayout, ImageModel> e : layoutToImageMap.entrySet()) {
@@ -789,7 +787,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             // Über alle Punkte in diesem Bild gehen
             for (PointModel p : e.getValue().points) {
                 // Container finden
-                View wrapper = (View) layout.findViewWithTag(p);
+                View wrapper = layout.findViewWithTag(p);
                 if (wrapper == null) continue;
 
                 // Find circle view
@@ -887,7 +885,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 } else if (p.mark == 2) {
                     setCircleBackground(circle, ContextCompat.getColor(this, R.color.circleBackgroundYellow), alphaHistory, strokeWidthDp);
                     label.setTextColor(ContextCompat.getColor(this, R.color.circleFontYellow));
-                } else if (p.mark > 2) {
+                } else {
                     setCircleBackground(circle, ContextCompat.getColor(this, R.color.circleBackgroundRed), alphaHistory, strokeWidthDp);
                     label.setTextColor(ContextCompat.getColor(this, R.color.circleFontRed));
                 }
@@ -973,7 +971,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     }
 
     // Set rating buttons drawable circle (See on Click listener)
-    private void selectRating(int mark, boolean saveData, MaterialButton selectedButton, int selectedDrawable, int selectedColor, MaterialButton... otherButtons) {
+    private void selectRating(int mark, boolean saveData, MaterialButton selectedButton, int selectedDrawable, MaterialButton... otherButtons) {
         if (currentPoint == null) return; // Absturz verhindern
         if (currentLayout == null) return; // Absturz verhindern
 
