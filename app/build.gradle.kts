@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.example.checkinset"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.checkinset"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -17,7 +17,7 @@ android {
 
         // Nur die nötigsten Architekturen einbinden
         ndk {
-            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
         }
     }
 
@@ -68,10 +68,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.gson)
     implementation(libs.tensorflow.lite)
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.11.0")
-    implementation("com.google.android.material:material:1.13.0")
+    implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.material)
 //implementation("org.tensorflow:tensorflow-lite:2.8.0")
 
 }
