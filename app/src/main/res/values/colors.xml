@@ -8,4 +8,14 @@
     <color name="colorBackgroundLight">#FFF0ECEF</color>
     <color name="colorTranspBackground">#AAE6E1E5</color>
     <color name="colorSecondaryBlackText">#FF616161</color>
+
+    <!--    Circle colors-->
+    <color name="circleBackgroundGreen">#FFB4DEB6</color>
+    <color name="circleFontGreen">#FF2E7D32</color>
+
+    <color name="circleBackgroundYellow">#FFFFD14F</color>
+    <color name="circleFontYellow">#FFDA8200</color>
+
+    <color name="circleBackgroundRed">#FFFBB4AF</color>
+    <color name="circleFontRed">#FFD32F2F</color>
 </resources>

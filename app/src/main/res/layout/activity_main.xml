@@ -25,23 +25,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/colorBackground"
         android:elevation="0dp"
         android:orientation="vertical"
         android:paddingHorizontal="0dp"
         android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="@color/colorBackground">
+        android:paddingBottom="0dp">
 
         <!-- ScrollView, in dem die dynamisch erzeugten Bildbereiche platziert werden -->
         <androidx.core.widget.NestedScrollView
             android:id="@+id/imageScroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:fillViewport="true"
             android:layout_weight="1"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:fillViewport="true"
             android:paddingBottom="300dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"> <!-- Höhe des Bottom Sheets, nicht berechnet!! -->
 
@@ -79,7 +79,9 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_peekHeight="120dp"
         app:behavior_hideable="false"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <View
             android:layout_width="36dp"
@@ -94,7 +96,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <TextView
                 android:id="@+id/tvCircleNumber"
@@ -104,8 +108,8 @@
                 android:gravity="center"
                 android:text="3"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#602D58"
+                android:textStyle="bold"
+                android:textColor="@color/DarkColor1"
                 android:background="@drawable/bg_circle"/>
 
             <!-- Platzhalter, der alles dazwischen füllt -->
@@ -124,183 +128,248 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnDeletePoint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete Point"/>
-
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_circle"
+                android:src="@drawable/ic_delete"
+                android:scaleType="centerInside"
+                android:contentDescription="Delete"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"/>
         </LinearLayout>
 
-        <LinearLayout
+        <!-- DATUM -->
+        <com.google.android.material.textfield.TextInputLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:elevation="8dp"
-            android:weightSum="2"
-            android:layout_marginBottom="8dp">
+            android:hint="@string/created_on"
+            android:layout_margin="4dp"
+            app:startIconTint="?attr/colorOnSurfaceVariant"
+            app:boxStrokeColor="?attr/colorPrimary"
+            app:boxStrokeWidth="1dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
-            <TextView
-                android:id="@+id/tvLabelTimestamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/TextViewTextStyle"
-                android:text="Created on" />
-
-<!--            <TextView-->
-<!--                android:id="@+id/tvLabelTimestamp"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Created on"-->
-<!--                android:textSize="16sp"-->
-<!--                android:textColor="#000000"-->
-<!--                android:layout_gravity="center_vertical" />-->
-
-            <TextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tvTimestamp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/clickable_box"
-                android:padding="8dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="2025-04-06 12:00"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:clickable="true"
-                android:focusable="true" />
-        </LinearLayout>
+                android:text="No Date found.."
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:inputType="date"
+                android:focusable="false"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- X-Koordinate Zeile -->
+        <!-- X-POSITION -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp"
-            android:weightSum="5">
+            android:layout_margin="4dp"
+            android:weightSum="2">
 
-            <TextView
-                android:id="@+id/tvLabelPosition"
+            <com.google.android.material.textfield.TextInputLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Position"
-                style="@style/TextViewTextStyle"
-                android:gravity="left" />
+                android:hint="X Position"
+                android:layout_marginEnd="4dp"
+                app:startIconTint="?attr/colorOnSurfaceVariant"
+                app:boxStrokeColor="?attr/colorPrimary"
+                app:boxStrokeWidth="1dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
-            <TextView
-                android:id="@+id/tvLabelX"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvCoordinateX"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Data.."
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:inputType="textPersonName"
+                    android:focusable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Y-POSITION -->
+            <com.google.android.material.textfield.TextInputLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="X"
-                style="@style/TextViewTextStyle"
-                android:gravity="center" />
+                android:hint="Y Position"
+                android:layout_marginStart="4dp"
+                app:startIconTint="?attr/colorOnSurfaceVariant"
+                app:boxStrokeColor="?attr/colorPrimary"
+                app:boxStrokeWidth="1dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
-            <TextView
-                android:id="@+id/tvCoordinateX"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/clickable_box"
-                android:padding="8dp"
-                android:text="0"
-                android:textSize="16sp"
-                android:textColor="#000000"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <TextView
-                android:id="@+id/tvLabelY"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:text="Y"
-                style="@style/TextViewTextStyle"
-                android:gravity="center" />
-
-            <TextView
-                android:id="@+id/tvCoordinateY"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/clickable_box"
-                android:padding="8dp"
-                android:text="0"
-                android:textSize="16sp"
-                android:textColor="#000000"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvCoordinateY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Data.."
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:inputType="textPersonName"
+                    android:focusable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Vote your experience -->
+        <!-- TRAFFIC LIGHT RATING -->
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp">
 
+            <!-- TextInputLayout als Hintergrund für Linie und Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/rate_your_experience"
+                app:boxStrokeColor="?attr/colorPrimary"
+                app:boxStrokeWidth="1dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:hintEnabled="true"
+                app:expandedHintEnabled="false"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" "
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:textColor="@android:color/transparent"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Traffic Light Buttons darüber -->
             <LinearLayout
-                android:id="@+id/leftBox"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/middleGuideline"
-                app:layout_constraintTop_toTopOf="parent">
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
-                <TextView
-                    android:id="@+id/tvLabelMark"
+                <!-- Green (Good) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ratingBtnGreen"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:layout_weight="1"
-                    android:text="Tolerability Rating"
-                    style="@style/TextViewTextStyle"
-                    android:gravity="left" />
+                    android:layout_marginEnd="8dp"
+                    app:icon="@drawable/ic_circle"
+                    app:iconTint="@color/circleBackgroundGreen"
+                    app:iconGravity="textStart"
+                    app:iconSize="40dp"
+                    app:iconPadding="0dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    app:strokeColor="@android:color/transparent"
+                    app:strokeWidth="0dp"
+                    app:cornerRadius="28dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
 
-                <TextView
-                    android:id="@+id/tvMark"
+                <!-- Yellow (Neutral) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ratingBtnYellow"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:layout_weight="1"
-                    android:background="@drawable/clickable_box"
-                    android:padding="8dp"
-                    android:text="0"
-                    android:textSize="16sp"
-                    android:textColor="#000000"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    app:icon="@drawable/ic_circle"
+                    app:iconTint="@color/circleBackgroundYellow"
+                    app:iconGravity="textStart"
+                    app:iconSize="40dp"
+                    app:iconPadding="0dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    app:strokeColor="@android:color/transparent"
+                    app:strokeWidth="0dp"
+                    app:cornerRadius="28dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
+
+                <!-- Red (Bad) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ratingBtnRed"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:icon="@drawable/ic_circle"
+                    app:iconTint="@color/circleBackgroundRed"
+                    app:iconGravity="textStart"
+                    app:iconSize="40dp"
+                    app:iconPadding="0dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    app:strokeColor="@android:color/transparent"
+                    app:strokeWidth="0dp"
+                    app:cornerRadius="28dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
 
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/middleGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="1" />
+        </FrameLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        <!-- TEXTFIELD FOR NOTES-->
         <com.google.android.material.textfield.TextInputLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            style="@style/Widget.Material3.TextInputLayout.FilledBox"
-            app:hintEnabled="false">
+            android:hint="@string/notes"
+            android:layout_margin="4dp"
+            app:startIconTint="?attr/colorOnSurfaceVariant"
+            app:boxStrokeColor="?attr/colorPrimary"
+            app:boxStrokeWidth="1dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pointNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Add comments here.."
-                android:inputType="textMultiLine"
+                android:text="Add your notes here.."
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:inputType="textMultiLine|textNoSuggestions"
                 android:minLines="2"
-                android:gravity="top|start"/>
+                android:gravity="top|start"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

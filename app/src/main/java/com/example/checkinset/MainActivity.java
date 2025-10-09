@@ -1,29 +1,19 @@
 package com.example.checkinset;
 
-import static java.security.AccessController.getContext;
-
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Outline;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -34,58 +24,31 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.*;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.widget.NestedScrollView;
-
 import com.example.checkinset.model.DataModel;
 import com.example.checkinset.model.ImageModel;
 import com.example.checkinset.model.PointModel;
 import com.example.checkinset.utils.DataStorage;
-import com.example.checkinset.DateUtils;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
 import android.animation.ValueAnimator;
-
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.graphics.Color;
 
 public class MainActivity extends AppCompatActivity implements ImageManager.ImageResultCallback {
 
@@ -95,90 +58,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     private boolean isAddingPoint = false;
     private boolean isDeletingImage = false;
 
-    // Parula-Farben
-    private static final int[] PARULA_COLORS = {
-            0xFF352A87, 0xFF343DAE, 0xFF276FB0, 0xFF21908D,
-            0xFF22A884, 0xFF44BF70, 0xFF7AD151, 0xFFBADE24,
-            0xFFFDE725, 0xFFFFFF00
-    };
-
-    // Magma-Farben
-    private static final int[] MAGMA_COLORS = {
-            0xFF000004, 0xFF1B0C41, 0xFF4A0C6B, 0xFF781C6D,
-            0xFFA6365D, 0xFFF1605D, 0xFFFCA85E, 0xFFFFE99F,
-            0xFFFFFCBF, 0xFFFFFDD9
-    };
-
-    // Viridis Color Map Customized : Green to purple (13 Entrys)
-    private static final int[] VIRIDIS_COLORS = {
-            0xFFB6DE2B, // Grün (0% Transparenz)
-            0xF96CCE59, // 5% Transparenz
-            0xE91F9D8A, // 10% Transparenz
-            0xD826838F, // 15% Transparenz
-            0xCC31688E, // 20% Transparenz
-            0xBF3E4A89, // 25% Transparenz
-            0xB2482878, // 30% Transparenz
-            0xA0440154  // Lila (37.5% Transparenz)
-    };
-
-    private static final int[] New_Colors = {
-            0xFF0E8393, // Blau (0% Transparenz
-            0xA0440154  // Lila (37.5% Transparenz)
-    };
-
-    private static final int[] Special_Colors = {
-            0x4075D054,
-            0x00FDBE3D
-    };
-
-    public static int[] generateColormap(int steps, int[] baseColors) {
-        if (steps <= 1) {
-            throw new IllegalArgumentException("Die Anzahl der Schritte muss größer als 1 sein.");
-        }
-
-        int[] colormap = new int[steps];
-        float stepSize = (float) (baseColors.length - 1) / (steps - 1);
-
-        for (int i = 0; i < steps; i++) {
-            float position = i * stepSize;
-            int lowerIndex = (int) Math.floor(position);
-            int upperIndex = Math.min(lowerIndex + 1, baseColors.length - 1);
-            float fraction = position - lowerIndex;
-
-            colormap[i] = interpolateColor(baseColors[lowerIndex], baseColors[upperIndex], fraction);
-        }
-
-        return colormap;
-    }
-
-    /**
-     * Interpoliert zwischen zwei Farben.
-     *
-     * @param color1 Erste Farbe (ARGB).
-     * @param color2 Zweite Farbe (ARGB).
-     * @param fraction Interpolationsfaktor (0.0 bis 1.0).
-     * @return Die interpolierte Farbe (ARGB).
-     */
-    private static int interpolateColor(int color1, int color2, float fraction) {
-        int a1 = Color.alpha(color1);
-        int r1 = Color.red(color1);
-        int g1 = Color.green(color1);
-        int b1 = Color.blue(color1);
-
-        int a2 = Color.alpha(color2);
-        int r2 = Color.red(color2);
-        int g2 = Color.green(color2);
-        int b2 = Color.blue(color2);
-
-        int a = (int) (a1 + fraction * (a2 - a1));
-        int r = (int) (r1 + fraction * (r2 - r1));
-        int g = (int) (g1 + fraction * (g2 - g1));
-        int b = (int) (b1 + fraction * (b2 - b1));
-
-        return Color.argb(a, r, g, b);
-    }
-
-    // Globales Datenmodell, geladen/gespeichert via JSON
     private DataModel dataModel;
     private DataStorage dataStorage;
 
@@ -193,24 +72,24 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
     // Bottom Sheet Komponenten
     private LinearLayout bottomSheet;
-    private TextView tvCircleNumber, tvTimestamp, tvCoordinateX, tvCoordinateY, tvMark;
+    private TextView tvCircleNumber;
 
-    private TextInputEditText pointNotes;
+    private TextInputEditText pointNotes, tvTimestamp, tvCoordinateX, tvCoordinateY;
 
-    private Button btnDeletePoint;
+    MaterialButton ratingBtnGreen, ratingBtnYellow, ratingBtnRed;
+
+    private AppCompatImageButton btnDeletePoint;
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
 
     // Global gespeicherter aktuell ausgewählter Punkt und zugehöriges Layout
     private PointModel currentPoint;
     private CustomImageLayout currentLayout;
 
-    private ValueAnimator pulseAnimator;
 
     private DataIOManager dataIOManager;
 
     private boolean protectedViewOn = true; // default: an
     private boolean historyViewOn = false;
-    private MenuItem toggleItem;
 
     private WavePulseAnimator waveAnimator;
 
@@ -219,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
     private UpdateChecker checker;
 
+    private PointModel lastPoint = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         //Check for updates
         String currentVersion = getString(R.string.app_vers);
-        checker = new UpdateChecker(this, currentVersion);
+        checker = new UpdateChecker(this, this.getString(R.string.app_vers));
         checker.checkForUpdate(false);
 
         // Toolbar initialisieren
@@ -248,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         tvTimestamp = findViewById(R.id.tvTimestamp);
         tvCoordinateX = findViewById(R.id.tvCoordinateX);
         tvCoordinateY = findViewById(R.id.tvCoordinateY);
-        tvMark = findViewById(R.id.tvMark);
+        ratingBtnGreen = findViewById(R.id.ratingBtnGreen);
+        ratingBtnYellow = findViewById(R.id.ratingBtnYellow);
+        ratingBtnRed = findViewById(R.id.ratingBtnRed);
         pointNotes = findViewById(R.id.pointNotes);
         btnDeletePoint = findViewById(R.id.btnDeletePoint);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -343,22 +226,9 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             });
         });
 
-        tvMark.setOnClickListener(v -> {
-            float currentMark = currentPoint != null ? currentPoint.mark : 0f;
-            showCoordinateEditDialog("Mark", currentMark, newValue -> {
-                if (currentPoint != null) {
-                    int markValue = (int) newValue;
-                    if (markValue >= 0 && markValue <= 3) {
-                        currentPoint.mark = markValue;
-                        tvMark.setText(String.format(Locale.getDefault(), "%d", markValue));
-                        loadUIFromDataModel();
-                        DataStorage.saveData(MainActivity.this, dataModel);
-                    } else {
-                        Toast.makeText(MainActivity.this, "Only 0,1,2,3 allowed.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        });
+        ratingBtnGreen.setOnClickListener(v -> selectRating(1,true, ratingBtnGreen, R.drawable.ic_circle_selected_green, R.color.circleBackgroundGreen, ratingBtnYellow, ratingBtnRed));
+        ratingBtnYellow.setOnClickListener(v -> selectRating(2,true, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, R.color.circleBackgroundYellow, ratingBtnGreen, ratingBtnRed));
+        ratingBtnRed.setOnClickListener(v -> selectRating(3,true, ratingBtnRed, R.drawable.ic_circle_selected_red, R.color.circleBackgroundRed, ratingBtnGreen, ratingBtnYellow));
 
         pointNotes.addTextChangedListener(new TextWatcher() {
             @Override
@@ -498,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         } else if (item.getItemId() == R.id.check_for_updates) {
             checker.checkForUpdate(true);
             return true;
-        } else if (item.getItemId() == R.id.action_aboutCheckInset) {
+        } else if (item.getItemId() == R.id.action_aboutSkinSafe) {
             Intent intent_settings_about = new Intent(this, SettingsAboutActivity.class);
             startActivity(intent_settings_about);
             return true;
@@ -568,6 +438,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         for (ImageModel img : dataModel.images) {
             addImageToUI(img);
         }
+
+        showPointDetails(currentPoint, currentLayout);
     }
 
     public void updateDataModel(DataModel newModel) {
@@ -772,7 +644,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         // 2) Kreis‑View
         View circle = new View(this);
         circle.setId(R.id.point_circle);
-        setCircleBackground(circle, color, null, 0);
+        setCircleBackground(circle, color, 255, 0);
 
 
         wrapper.addView(circle, new FrameLayout.LayoutParams(
@@ -831,11 +703,14 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         return closestPoint;
     }
 
-    /**
-     * Zeigt die Details des ausgewählten Punktes im Bottom Sheet an.
-     */
+    //Refresh and Show Bottom Sheet details of selected point
     private void showPointDetails(PointModel point, CustomImageLayout layout) {
-        int originalPointColor = point.color;
+        if (point == null) {
+            Log.e("MainActivity", "showPointDetails: point ist null – kein Datenobjekt vorhanden");
+            return;
+        }
+
+        boolean pointChanged = (lastPoint != point);
 
         // Zuerst alle Punkte auf den Standardradius zurücksetzen
         refreshAllPoints();
@@ -845,8 +720,26 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             return;
         }
 
+        //Set Bottom Sheet Values
+
         //Set Days old
         tvCircleNumber.setText(String.valueOf(getDaysDifference(point.timestamp)));
+
+        // Kreisfarbe
+        GradientDrawable bgDrawable = (GradientDrawable) tvCircleNumber.getBackground();
+        if (point.mark <= 1) {
+            bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundGreen));
+            tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontGreen));
+            selectRating(1,false, ratingBtnGreen, R.drawable.ic_circle_selected_green, R.color.circleBackgroundGreen, ratingBtnYellow, ratingBtnRed);
+        } else if (point.mark == 2) {
+            bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundYellow));
+            tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontYellow));
+            selectRating(2,false, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, R.color.circleBackgroundYellow, ratingBtnGreen, ratingBtnRed);
+        } else if (point.mark > 2) {
+            bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundRed));
+            tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontRed));
+            selectRating(3,false, ratingBtnRed, R.drawable.ic_circle_selected_red, R.color.circleBackgroundRed, ratingBtnGreen, ratingBtnYellow);
+        }
 
         // Setze Text für den ausgewählten Punkt
         tvTimestamp.setText(DateUtils.convertDate(point.timestamp));
@@ -855,7 +748,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         int absY = (int) (layout.getHeight() * point.yPercent);
         tvCoordinateX.setText(String.valueOf(absX));
         tvCoordinateY.setText(String.valueOf(absY));
-        tvMark.setText(String.valueOf(point.mark));
         pointNotes.setText(currentPoint.notes);
 
         // Bottom Sheet anzeigen
@@ -865,15 +757,15 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         currentPoint = point;
         currentLayout = layout;
 
-        // Punkt-View finden und Kreis weiß einfärben:
+        // Punkt-View finden und Kreis einfärben:
         View pointView = getPointView(layout, point);
         if (pointView != null) {
             View circle = pointView.findViewById(R.id.point_circle);
-
-            //Text im Kreis schwarz einfärben
-            //TextView overlay = pointView.findViewById(R.id.point_label);
-            //overlay.setTextColor(Color.BLACK);
+            TextView label = pointView.findViewById(R.id.point_label);
+            setCircleBackground(circle, ContextCompat.getColor(this, R.color.colorBackgroundLight), 255,0);
+            label.setTextColor(ContextCompat.getColor(this, R.color.DarkColor1));
         }
+
 
         if (waveAnimator != null) {
             waveAnimator.stop();
@@ -894,6 +786,9 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 3f
         );
         waveAnimator.start();
+
+        // Aktuellen Punkt/Layout merken
+        lastPoint = point;
     }
 
     private View getPointView(CustomImageLayout layout, PointModel point) {
@@ -909,16 +804,14 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         return null;
     }
 
+    //Modifiy design of all points on images (NOT Bottom Sheet)
     private void refreshAllPoints() {
-
+        int strokeColor = android.R.color.transparent;
+        float strokeWidthDp = 0;
+        int alphaHistory = 255;
         int labelFadedDays = SettingsManager.getlabelFadedDaysOff(this);; // Ab wieviel Tagen soll das Label ausgeblendet werden?
         int labelOffDays = SettingsManager.getDaysForLabelOff(this);
         int maxPoints = SettingsManager.getMaxPointsHistory(this);
-
-        //Wave stoppen
-        if (waveAnimator != null) {
-            waveAnimator.stop();
-        }
 
         // Über alle Bilder gehen
         for (Map.Entry<CustomImageLayout, ImageModel> e : layoutToImageMap.entrySet()) {
@@ -941,26 +834,17 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 if (historyViewOn) {
                     // ✅ Alle Punkte behalten, keine Zahl anzeigen
                     label.setText("");
+
+                    //Add alpha to color
+                    alphaHistory = 120; // =75% Transparent 255=Not transparent
                     label.setTextColor(Color.TRANSPARENT); // optional, sonst leer
+
+                    //Set Stroke width for history graph
+                    strokeWidthDp = 1.5f;
 
                     // Kreis
                     int baseSize = (int) (16 * getResources().getDisplayMetrics().density);
-                    int newSize = (int) (baseSize * 0.5f);
-
-                    // Farbe
-                    // 100% — FF / 75% — BF / 50% — 7F / 25% — 3F
-                    int alpha = 0xBF << 24; // 50% Alpha = 0x80
-                    int fadedColor =  alpha | 0x00CCCCCC; // 0x40 = ~25% Alph
-
-                    if (p.mark == 1) {
-                        fadedColor = alpha | 0x00009A00; // 0x40 = ~25% Alpha
-                    } else if (p.mark == 2) {
-                        fadedColor = alpha | 0x00F79E1B; // 0x40 = ~25% Alpha
-                    } else if (p.mark == 3) {
-                        fadedColor = alpha | 0x00FF5F00; // 0x40 = ~25% Alpha
-                    }
-
-                    setCircleBackground(circle, fadedColor, null, 0);
+                    int newSize = (int) (baseSize * 1f); //1 = keine Kreis Skalierung
 
                     // Kreisgröße setzen
                     ViewGroup.LayoutParams params = circle.getLayoutParams();
@@ -983,20 +867,15 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                     // Label anzeigen
                     if (daysDifference <= labelOffDays) {
                         label.setText(String.valueOf(daysDifference));
-                        label.setTextColor(ContextCompat.getColor(this, R.color.DarkColor1));
+
                         label.setTypeface(label.getTypeface(), Typeface.BOLD);
 
-                        // Kreisfarbe
-                        setCircleBackground(circle, ContextCompat.getColor(this, R.color.colorBackgroundLight), null, 0);
 
                     } else {
 
                         // Labels nachdem die Tage überschritten sind, ausblenden und Kreis verkleinern
                         if (daysDifference <= labelFadedDays) {
                             label.setText(""); // Kein Label anzeigen
-                            //int fadedColor = 0xCC602D58; // ARGB: 80% Alpha, Lila
-                            int fadedColor = 0xCCCCCCCC; // ARGB: 80% Alpha, hellgrau
-                            setCircleBackground(circle, fadedColor, null, 0);
 
                             int baseSize = (int) (16 * getResources().getDisplayMetrics().density);
 
@@ -1032,23 +911,38 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                     }
                 }
 
+                // Kreisfarbe
+                if (p.mark <= 1) {
+                    setCircleBackground(circle, ContextCompat.getColor(this, R.color.circleBackgroundGreen), alphaHistory, strokeWidthDp);
+                    label.setTextColor(ContextCompat.getColor(this, R.color.circleFontGreen));
+                } else if (p.mark == 2) {
+                    setCircleBackground(circle, ContextCompat.getColor(this, R.color.circleBackgroundYellow), alphaHistory, strokeWidthDp);
+                    label.setTextColor(ContextCompat.getColor(this, R.color.circleFontYellow));
+                } else if (p.mark > 2) {
+                    setCircleBackground(circle, ContextCompat.getColor(this, R.color.circleBackgroundRed), alphaHistory, strokeWidthDp);
+                    label.setTextColor(ContextCompat.getColor(this, R.color.circleFontRed));
+                }
+
             }
         }
     }
 
-    private void setCircleBackground(View view, int fillColor, @Nullable Integer strokeColor, int strokeWidthPx) {
+    private void setCircleBackground(View view, int fillColor, int alphaHistory, float strokeWidthDp) {
         GradientDrawable gd = new GradientDrawable();
         gd.setShape(GradientDrawable.OVAL);
-        gd.setColor(fillColor);
-        int alpha = Color.alpha(fillColor);
-        gd.setAlpha(alpha);
-        view.setBackground(gd);
 
-        // Randfarbe (nur setzen, wenn angegeben)
-        if (strokeColor != null && strokeWidthPx > 0) {
-            gd.setStroke(strokeWidthPx, strokeColor);
+        //Transparenz nur auf die Füllfarbe anwenden
+        int fillWithAlpha = ColorUtils.setAlphaComponent(fillColor, alphaHistory);
+        gd.setColor(fillWithAlpha);
+
+        //Stroke bleibt deckend (keine Alpha-Reduktion)
+        if (strokeWidthDp > 0) {
+            float density = getResources().getDisplayMetrics().density;
+            int strokeWidthPx = (int) (strokeWidthDp * density + 0.5f);
+            gd.setStroke(strokeWidthPx, fillColor);
         }
 
+        view.setBackground(gd);
     }
 
     private void removeImage(CustomImageLayout layout) {
@@ -1109,5 +1003,38 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         prefs.edit().putLong(KEY_LAST_SHOWN, System.currentTimeMillis()).apply();
     }
 
+    // Set rating buttons drawable circle (See on Click listener)
+    private void selectRating(int mark, boolean saveData, MaterialButton selectedButton, int selectedDrawable, int selectedColor, MaterialButton... otherButtons) {
+        if (currentPoint == null) return; // Absturz verhindern
+        if (currentLayout == null) return; // Absturz verhindern
+
+        // Set Selected Button
+        selectedButton.setIconTint(null);
+        selectedButton.setIcon(getDrawable(selectedDrawable));
+        currentPoint.mark = mark;
+
+        if (saveData) {
+            // Save data
+            showPointDetails(currentPoint, currentLayout);
+            DataStorage.saveData(MainActivity.this, dataModel);
+        }
+
+        // Reset other buttons
+        for (MaterialButton btn : otherButtons) {
+            btn.setIcon(getDrawable(R.drawable.ic_circle));
+
+            // Farbe basierend auf Button ID setzen
+            int color;
+            if (btn.getId() == R.id.ratingBtnGreen) {
+                color = R.color.circleBackgroundGreen;
+            } else if (btn.getId() == R.id.ratingBtnYellow) {
+                color = R.color.circleBackgroundYellow;
+            } else { // ratingBtnRed
+                color = R.color.circleBackgroundRed;
+            }
+
+            btn.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, color)));
+        }
+    }
 
 }

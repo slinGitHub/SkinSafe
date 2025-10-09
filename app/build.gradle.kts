@@ -14,16 +14,28 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Nur die nötigsten Architekturen einbinden
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+        debug {
+            // Debug bleibt unoptimiert, schnelleres Build
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -31,6 +43,17 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+
+    packaging {
+        resources {
+            // Unnötige Dateien entfernen
+            excludes += listOf(
+                "META-INF/*.kotlin_module",
+                "META-INF/LICENSE*",
+                "META-INF/NOTICE*"
+            )
+        }
     }
 }
 
