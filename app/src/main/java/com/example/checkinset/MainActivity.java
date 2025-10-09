@@ -27,6 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.*;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -71,15 +73,12 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     private ImageManager imageManager;
     private String currentImageTitle;
 
-    // Bottom Sheet Komponenten
-    private LinearLayout bottomSheet;
     private TextView tvCircleNumber;
 
     private TextInputEditText pointNotes, tvTimestamp, tvCoordinateX, tvCoordinateY;
 
     MaterialButton ratingBtnGreen, ratingBtnYellow, ratingBtnRed;
 
-    private AppCompatImageButton btnDeletePoint;
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
 
     // Global gespeicherter aktuell ausgewählter Punkt und zugehöriges Layout
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         setContentView(R.layout.activity_main);
 
         //Check for updates
-        String currentVersion = getString(R.string.app_vers);
         checker = new UpdateChecker(this, this.getString(R.string.app_vers));
         checker.checkForUpdate(false);
 
@@ -121,7 +119,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         imageContainer = findViewById(R.id.imageContainer);
 
         //BottomSheet initialisieren
-        bottomSheet = findViewById(R.id.bottom_sheet);
+        // Bottom Sheet Komponenten
+        LinearLayout bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheet.setBackground(ContextCompat.getDrawable(this, R.drawable.bottom_sheet_background));
 
         tvCircleNumber = findViewById(R.id.tvCircleNumber);
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         ratingBtnYellow = findViewById(R.id.ratingBtnYellow);
         ratingBtnRed = findViewById(R.id.ratingBtnRed);
         pointNotes = findViewById(R.id.pointNotes);
-        btnDeletePoint = findViewById(R.id.btnDeletePoint);
+        AppCompatImageButton btnDeletePoint = findViewById(R.id.btnDeletePoint);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         bottomSheet.post(() -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
@@ -144,15 +143,17 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             // Versuche das vorhandene Datum/Uhrzeit zu parsen, ansonsten aktuelles Datum/Uhrzeit verwenden
             Calendar calendar = Calendar.getInstance();
             if (currentPoint != null && currentPoint.timestamp != null) {
+                // Erwartetes Format: "yyyy-MM-dd HH:mm:ss"
+                String timestamp = currentPoint.timestamp;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                Date date = null;
                 try {
-                    // Erwartetes Format: "yyyy-MM-dd HH:mm:ss"
-                    String timestamp = currentPoint.timestamp;
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    Date date = sdf.parse(timestamp);
-                    calendar.setTime(date);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    date = sdf.parse(timestamp);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
                 }
+                if (date != null)
+                    calendar.setTime(date);
             }
 
             // Öffne den DatePickerDialog
@@ -290,7 +291,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                             dataIOManager.exportDataToZip(uri);
                         } catch (IOException e) {
                             Toast.makeText(this, "Error when exporting the data: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
                         }
                     } else {
                         Toast.makeText(this, "Export canceled.", Toast.LENGTH_SHORT).show();
@@ -304,7 +304,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                             dataIOManager.importDataFromZip(uri);
                         } catch (IOException | JSONException e) {
                             Toast.makeText(this, "Fehler beim Importieren der Daten: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
                         }
                     } else {
                         Toast.makeText(this, "Import abgebrochen.", Toast.LENGTH_SHORT).show();
@@ -312,15 +311,11 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 });
 
         //Add image of white owl to toolbar
-        getSupportActionBar().setIcon(R.drawable.iconsowl_vector_purple);
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Window window = getWindow();
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorBackground));
-//        }
-
+        try {
+            getSupportActionBar().setIcon(R.drawable.iconsowl_vector_purple);
+        } catch (Exception e) {
+            Log.e("MainActivity", "onCreate: Error setting toolbar icon", e);
+        }
     }
 
     @Override
@@ -465,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("MainActivity", "addImageToUI: Error creating the image.", e);
             }
         }
 
@@ -583,17 +578,26 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         showCoffeeDonationSnackbar(coordinator);
     }
 
-    @Override
-    public void onBackPressed() {
-        int state = bottomSheetBehavior.getState();
-        if (state == BottomSheetBehavior.STATE_EXPANDED
-                || state == BottomSheetBehavior.STATE_HALF_EXPANDED)  {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            refreshAllPoints();
-            return; // Verhindert, dass die App geschlossen wird
+    OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            // Deine alte Logik
+            int state = bottomSheetBehavior.getState();
+            if (state == BottomSheetBehavior.STATE_EXPANDED
+                    || state == BottomSheetBehavior.STATE_HALF_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                refreshAllPoints();
+                return;
+                // hier nicht weiterleiten -> Back wurde behandelt
+            } else {
+                // Nicht behandelt: temporär deaktivieren und System die Back-Action ausführen lassen
+                setEnabled(false);
+                MainActivity.this.getOnBackPressedDispatcher().onBackPressed();
+                // optional wieder aktivieren (Lifecycle macht das meist automatisch)
+                setEnabled(true);
+            }
         }
-        super.onBackPressed();
-    }
+    };
 
     private void createPoint(CustomImageLayout layout, float xPercent, float yPercent) {
         ImageModel imgModel = layoutToImageMap.get(layout);
@@ -654,7 +658,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Date pointDate = df.parse(timestamp);
-            long diffMillis = new Date().getTime() - pointDate.getTime();
+            if (pointDate == null) return 0;
+                long diffMillis = new Date().getTime() - pointDate.getTime();
             return diffMillis / (1000L * 60 * 60 * 24); // Ganzzahlige Tage
         } catch (ParseException e) {
             e.printStackTrace();
@@ -666,7 +671,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         PointModel closestPoint = null;
         double minDistance = Double.MAX_VALUE;
         int labelFadedDays = SettingsManager.getlabelFadedDaysOff(this);; // Ab wieviel Tagen soll das Label ausgeblendet werden?
-        long daysDifference = 0;
+        long daysDifference;
 
         for (PointModel point : imageModel.points) {
             daysDifference = getDaysDifference(point.timestamp);
@@ -711,7 +716,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundYellow));
             tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontYellow));
             selectRating(2,false, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, R.color.circleBackgroundYellow, ratingBtnGreen, ratingBtnRed);
-        } else if (point.mark > 2) {
+        } else {
             bgDrawable.setColor(ContextCompat.getColor(this, R.color.circleBackgroundRed));
             tvCircleNumber.setTextColor(ContextCompat.getColor(this, R.color.circleFontRed));
             selectRating(3,false, ratingBtnRed, R.drawable.ic_circle_selected_red, R.color.circleBackgroundRed, ratingBtnGreen, ratingBtnYellow);
@@ -733,7 +738,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         currentPoint = point;
         currentLayout = layout;
 
-        View wrapper = (View) layout.findViewWithTag(currentPoint);
+        View wrapper = layout.findViewWithTag(currentPoint);
         if (!(wrapper == null)) {
             // Find circle view
             View circle = wrapper.findViewById(R.id.point_circle);
@@ -758,7 +763,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         // Wellen-Animator initialisieren und starten
         waveAnimator = new WavePulseAnimator(
-                (ViewGroup) layout, // oder das passende Container-View
+                layout, // oder das passende Container-View
                 actualX,
                 actualY,
                 sizePx,
