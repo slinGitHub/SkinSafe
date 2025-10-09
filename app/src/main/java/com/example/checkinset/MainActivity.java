@@ -12,6 +12,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -308,10 +311,11 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 });
 
         //Add image of white owl to toolbar
-        try {
-            getSupportActionBar().setIcon(R.drawable.iconsowl_vector_purple);
-        } catch (Exception e) {
-            Log.e("MainActivity", "onCreate: Error setting toolbar icon", e);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setIcon(R.drawable.iconsowl_vector_purple);
+        } else {
+            Log.w("MainActivity", "Keine ActionBar vorhanden – Icon nicht gesetzt");
         }
     }
 
@@ -653,10 +657,9 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Date pointDate = df.parse(timestamp);
             if (pointDate == null) return 0;
-                long diffMillis = new Date().getTime() - pointDate.getTime();
+            long diffMillis = new Date().getTime() - pointDate.getTime();
             return diffMillis / (1000L * 60 * 60 * 24); // Ganzzahlige Tage
         } catch (ParseException e) {
-            e.printStackTrace();
             return 0;
         }
     }
@@ -977,7 +980,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         // Set Selected Button
         selectedButton.setIconTint(null);
-        selectedButton.setIcon(getDrawable(selectedDrawable));
+        selectedButton.setIcon(AppCompatResources.getDrawable(this, selectedDrawable));
         currentPoint.mark = mark;
 
         if (saveData) {
@@ -988,7 +991,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         // Reset other buttons
         for (MaterialButton btn : otherButtons) {
-            btn.setIcon(getDrawable(R.drawable.ic_circle));
+            btn.setIcon(AppCompatResources.getDrawable(this, R.drawable.ic_circle));
 
             // Farbe basierend auf Button ID setzen
             int color;
