@@ -48,7 +48,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import android.animation.ValueAnimator;
 import org.json.JSONException;
 
 public class MainActivity extends AppCompatActivity implements ImageManager.ImageResultCallback {
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     private boolean isDeletingImage = false;
 
     private DataModel dataModel;
-    private DataStorage dataStorage;
+    private final DataStorage dataStorage = new DataStorage();
 
     private ActivityResultLauncher<String> saveFileLauncher;
     private ActivityResultLauncher<String> openFileLauncher;
