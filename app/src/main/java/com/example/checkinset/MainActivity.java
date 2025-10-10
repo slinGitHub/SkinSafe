@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     private LinearLayout imageContainer;
     //private FloatingActionButton addPointButton;
     private ImageButton addPointButton;
-    private boolean isAddingPoint = false;
-    private boolean isDeletingImage = false;
+    private boolean isAddingPoint = false, isMovingPoint = false, isDeletingImage = false;
 
     private DataModel dataModel;
     private final DataStorage dataStorage = new DataStorage();
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
     private TextView tvCircleNumber;
 
-    private TextInputEditText pointNotes, tvTimestamp, tvCoordinateX, tvCoordinateY;
+    private TextInputEditText pointNotes, tvTimestamp;
 
     MaterialButton ratingBtnGreen, ratingBtnYellow, ratingBtnRed;
 
@@ -125,13 +124,12 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         tvCircleNumber = findViewById(R.id.tvCircleNumber);
         tvTimestamp = findViewById(R.id.tvTimestamp);
-        tvCoordinateX = findViewById(R.id.tvCoordinateX);
-        tvCoordinateY = findViewById(R.id.tvCoordinateY);
         ratingBtnGreen = findViewById(R.id.ratingBtnGreen);
         ratingBtnYellow = findViewById(R.id.ratingBtnYellow);
         ratingBtnRed = findViewById(R.id.ratingBtnRed);
         pointNotes = findViewById(R.id.pointNotes);
         AppCompatImageButton btnDeletePoint = findViewById(R.id.btnDeletePoint);
+        AppCompatImageButton btnMovePoint = findViewById(R.id.btnMovePoint);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         bottomSheet.post(() -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
@@ -195,37 +193,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         });
 
-        // Für X-Koordinate
-        //TextView tvCoordinateX = findViewById(R.id.tvCoordinateX);
-        tvCoordinateX.setOnClickListener(v -> {
-            // Aktuellen X-Wert holen (hier als float, z.B. aus dem aktuellen PointModel)
-            float currentX = currentPoint != null ? currentPoint.xPercent * currentLayout.getWidth() : 0f;
-            showCoordinateEditDialog("X", currentX, newValue -> {
-                // Aktualisiere den aktuellen PointModel-Wert (hier als Prozentwert)
-                if (currentPoint != null && currentLayout != null) {
-                    currentPoint.xPercent = newValue / (float) currentLayout.getWidth();
-                    // Aktualisiere die Anzeige
-                    tvCoordinateX.setText(String.format(Locale.getDefault(), "%.2f", newValue));
-                    loadUIFromDataModel();
-                    DataStorage.saveData(MainActivity.this, dataModel);
-                }
-            });
-        });
-
-        // Für Y-Koordinate
-        //TextView tvCoordinateY = findViewById(R.id.tvCoordinateY);
-        tvCoordinateY.setOnClickListener(v -> {
-            float currentY = currentPoint != null ? currentPoint.yPercent * currentLayout.getHeight() : 0f;
-            showCoordinateEditDialog("Y", currentY, newValue -> {
-                if (currentPoint != null && currentLayout != null) {
-                    currentPoint.yPercent = newValue / (float) currentLayout.getHeight();
-                    tvCoordinateY.setText(String.format(Locale.getDefault(), "%.2f", newValue));
-                    loadUIFromDataModel();
-                    DataStorage.saveData(MainActivity.this, dataModel);
-                }
-            });
-        });
-
         ratingBtnGreen.setOnClickListener(v -> selectRating(1,true, ratingBtnGreen, R.drawable.ic_circle_selected_green, ratingBtnYellow, ratingBtnRed));
         ratingBtnYellow.setOnClickListener(v -> selectRating(2,true, ratingBtnYellow, R.drawable.ic_circle_selected_yellow, ratingBtnGreen, ratingBtnRed));
         ratingBtnRed.setOnClickListener(v -> selectRating(3,true, ratingBtnRed, R.drawable.ic_circle_selected_red, ratingBtnGreen, ratingBtnYellow));
@@ -270,6 +237,22 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             isAddingPoint = true;
             addPointButton.setEnabled(false);
             Toast.makeText(MainActivity.this, "Tap on a picture to set a point.", Toast.LENGTH_SHORT).show();
+        });
+
+        btnMovePoint.setOnClickListener(v -> {
+            if (currentPoint != null && currentLayout != null) {
+                isMovingPoint = true;
+                Toast.makeText(MainActivity.this, "Tap to move the point.", Toast.LENGTH_SHORT).show();
+
+                int state = bottomSheetBehavior.getState();
+                // Use logical OR (||) and handle the HIDDEN state for a better UX.
+                if (state == BottomSheetBehavior.STATE_EXPANDED
+                        || state == BottomSheetBehavior.STATE_HALF_EXPANDED
+                        || state == BottomSheetBehavior.STATE_HIDDEN) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+
+            }
         });
 
         // Datenmodell laden
@@ -486,6 +469,20 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                     addPointButton.setEnabled(true);
                     return true;
                 }
+
+                if (isMovingPoint && currentPoint != null && currentLayout == customLayout) {
+                    float xPercent = event.getX() / customLayout.getWidth();
+                    float yPercent = event.getY() / customLayout.getHeight();
+                    currentPoint.xPercent = xPercent;
+                    currentPoint.yPercent = yPercent;
+                    loadUIFromDataModel();
+                    DataStorage.saveData(MainActivity.this, dataModel);
+                    showPointDetails(currentPoint, customLayout);
+                    isMovingPoint = false;
+                    Toast.makeText(MainActivity.this, "Point moved.", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - lastTapTime[0] < 300) { // 300 ms als Schwellwert
                     // Doppelklick erkannt: Ermittle den am nächsten liegenden Punkt
@@ -721,11 +718,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         // Setze Text für den ausgewählten Punkt
         tvTimestamp.setText(DateUtils.convertDate(point.timestamp));
-
-        int absX = (int) (layout.getWidth() * point.xPercent);
-        int absY = (int) (layout.getHeight() * point.yPercent);
-        tvCoordinateX.setText(String.valueOf(absX));
-        tvCoordinateY.setText(String.valueOf(absY));
         pointNotes.setText(currentPoint.notes);
 
         // Bottom Sheet anzeigen

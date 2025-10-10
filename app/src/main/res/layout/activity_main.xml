@@ -129,9 +129,23 @@
                 android:layout_weight="1" />
 
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btnMovePoint"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_circle"
+                android:src="@drawable/ic_edit_location"
+                android:scaleType="centerInside"
+                android:contentDescription="Move Point"
+                android:padding="10dp"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnDeletePoint"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/bg_circle"
                 android:src="@drawable/ic_delete"
                 android:scaleType="centerInside"
@@ -168,70 +182,6 @@
                 android:inputType="date"
                 android:focusable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- X-POSITION -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="4dp"
-            android:weightSum="2">
-
-            <com.google.android.material.textfield.TextInputLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="X Position"
-                android:layout_marginEnd="4dp"
-                app:startIconTint="?attr/colorOnSurfaceVariant"
-                app:boxStrokeColor="?attr/colorPrimary"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tvCoordinateX"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="No Data.."
-                    android:textAppearance="?attr/textAppearanceBodyLarge"
-                    android:inputType="textPersonName"
-                    android:focusable="false"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Y-POSITION -->
-            <com.google.android.material.textfield.TextInputLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Y Position"
-                android:layout_marginStart="4dp"
-                app:startIconTint="?attr/colorOnSurfaceVariant"
-                app:boxStrokeColor="?attr/colorPrimary"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tvCoordinateY"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="No Data.."
-                    android:textAppearance="?attr/textAppearanceBodyLarge"
-                    android:inputType="textPersonName"
-                    android:focusable="false"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
         <!-- Vote your experience -->
         <!-- TRAFFIC LIGHT RATING -->
