@@ -32,5 +32,6 @@
     <string name="created_on">Created on</string>
     <string name="notes">Notes</string>
     <string name="rate_your_experience">Rate your experience</string>
+    <string name="imageTitle">Enter image title</string>
 
 </resources>

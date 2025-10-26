@@ -8,6 +8,7 @@
             android:dialogTitle="Hide label on day"
             android:inputType="number"
             android:defaultValue="30"
+            android:icon="@drawable/ic_hide_label"
             app:useSimpleSummaryProvider="true"/>
 
         <EditTextPreference
@@ -16,14 +17,17 @@
             android:dialogTitle="Faded label from day"
             android:inputType="number"
             android:defaultValue="60"
+            android:icon="@drawable/ic_days_label_hidden"
             app:useSimpleSummaryProvider="true"/>
 
         <EditTextPreference
             android:key="max_points_history"
             android:title="Maximum points in history view"
-            android:summary="Set the maximum number of points shown in history view"
+            android:dialogTitle="Set maximum points in history view"
             android:defaultValue="100"
-            android:inputType="number" />
+            android:inputType="number"
+            android:icon="@drawable/ic_max_points_history_view"
+             app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
 

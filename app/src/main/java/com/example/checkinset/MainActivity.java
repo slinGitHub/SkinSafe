@@ -22,6 +22,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,8 +46,11 @@ import com.example.checkinset.model.PointModel;
 import com.example.checkinset.utils.DataStorage;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -386,15 +390,29 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     }
 
     private void showTitleInputDialog(boolean fromCamera) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter heading");
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
 
-        final EditText editText = new EditText(this);
+        // Material-kompatibles Eingabefeld
+        TextInputLayout inputLayout = new TextInputLayout(
+                this, null, com.google.android.material.R.style.Widget_Material3_TextInputLayout_OutlinedBox);
+        inputLayout.setHint(getString(R.string.imageTitle)); // oder direkt "Title"
+        inputLayout.setBoxStrokeWidth(1);
+        inputLayout.setBoxCornerRadii(12, 12, 12, 12);
+
+        final TextInputEditText editText = new TextInputEditText(this);
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(editText);
+        inputLayout.addView(editText);
+
+        // etwas Innenabstand für angenehmes Layout
+        int paddingInDp = 24;
+        int paddingInPx = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, paddingInDp, getResources().getDisplayMetrics());
+        inputLayout.setPadding(paddingInPx, paddingInPx, paddingInPx, 0);
+
+        builder.setView(inputLayout);
 
         builder.setPositiveButton("OK", (dialog, which) -> {
-            currentImageTitle = editText.getText().toString();
+            currentImageTitle = editText.getText().toString().trim();
             imageManager.setCurrentImageTitle(currentImageTitle);
             if (fromCamera) {
                 imageManager.checkCameraPermissionAndOpenCamera();
@@ -402,6 +420,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 imageManager.openGallery();
             }
         });
+
+
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
