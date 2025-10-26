@@ -16,7 +16,7 @@
         app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
         android:background="@color/colorBackground"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:title="SKIN SAFE"
+        app:title=" SKIN SAFE"
         android:layout_gravity="top"
         app:titleTextAppearance="@style/ToolbarTitleBold"
         android:titleTextColor="@color/DarkColor1" />
