@@ -130,8 +130,8 @@
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnMovePoint"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="@drawable/bg_circle"
                 android:src="@drawable/ic_edit_location"
                 android:scaleType="centerInside"
@@ -144,8 +144,8 @@
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnDeletePoint"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/bg_circle"
                 android:src="@drawable/ic_delete"
                 android:scaleType="centerInside"
