@@ -33,5 +33,19 @@
     <string name="notes">Notes</string>
     <string name="rate_your_experience">Rate your experience</string>
     <string name="imageTitle">Enter image title</string>
+    <string name="set_points">Set points</string>
+    <string name="skinsafe_logo">SkinSafe Logo</string>
+    <string name="days_old">Days old</string>
+    <string name="description_move_point">Move Point</string>
+    <string name="description_delete">Delete</string>
+    <string name="no_date_found">No Date found..</string>
+    <string name="place_holder_rate_your_exp">" "</string>
+    <string name="add_your_notes_here">Add your notes here..</string>
+    <string name="about_page_visit_the_skinsafe_project_page">Visit the SkinSafe project page</string>
+    <string name="about_page_skinsafe">SkinSafe</string>
+    <string name="about_page_donate_via_paypal">Donate via Paypal ❤️</string>
+    <string name="about_page_by_n_b_2025">by N. B., 2025</string>
+    <string name="top_app_bar_switch_history">Switch History</string>
+    <string name="top_app_bar_toggle_protected_images">Toggle Protected Images</string>
 
 </resources>

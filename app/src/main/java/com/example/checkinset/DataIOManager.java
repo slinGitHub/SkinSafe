@@ -29,7 +29,7 @@ import java.util.zip.ZipOutputStream;
 import com.example.checkinset.model.DataModel;
 import com.example.checkinset.model.ImageModel;
 import com.example.checkinset.model.PointModel;
-import com.example.checkinset.utils.DataStorage;
+import com.example.checkinset.model.DataStorage;
 
 public class DataIOManager {
     private Context context;

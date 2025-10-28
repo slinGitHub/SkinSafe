@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId = "com.example.checkinset"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "O.1 beta"
 

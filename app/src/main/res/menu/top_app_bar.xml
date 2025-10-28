@@ -4,12 +4,12 @@
     <item
         android:id="@+id/action_toggle_history"
         android:icon="@drawable/outline_history_toggle_off_24"
-        android:title="Switch History"
+        android:title="@string/top_app_bar_switch_history"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_toggle_protected_images"
         android:icon="@drawable/ic_wappen_on"
-        android:title="Toggle Protected Images"
+        android:title="@string/top_app_bar_toggle_protected_images"
         app:showAsAction="always" />
 </menu>

@@ -1,8 +1,7 @@
-package com.example.checkinset.utils;
+package com.example.checkinset.model;
 
 import android.content.Context;
 
-import com.example.checkinset.model.DataModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
