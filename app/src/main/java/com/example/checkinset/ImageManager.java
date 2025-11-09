@@ -1,5 +1,7 @@
 package com.example.checkinset;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -48,6 +50,8 @@ public class ImageManager {
 
     public static final int REQUEST_CAMERA_PERMISSION = 1001;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private static final int REQUEST_IMAGE = 1001;
     public static final int REQUEST_PICK_IMAGE = 2;
 
     private Activity activity;
@@ -121,39 +125,6 @@ public class ImageManager {
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         currentPhotoPath = image.getAbsolutePath();
         return image;
-    }
-
-    // Hilfsfunktion: Bitmap zu Float-Array (normalisiert auf 0..1)
-    private float[][][][] bitmapToFloatArray(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        float[][][][] input = new float[1][height][width][3];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int px = bitmap.getPixel(x, y);
-                input[0][y][x][0] = ((px >> 16) & 0xFF) / 255.0f; // R
-                input[0][y][x][1] = ((px >> 8) & 0xFF) / 255.0f;  // G
-                input[0][y][x][2] = (px & 0xFF) / 255.0f;         // B
-            }
-        }
-        return input;
-    }
-
-    // Hilfsfunktion: Float-Array zu Bitmap
-    private Bitmap floatArrayToBitmap(float[][][][] output) {
-        int height = output[0].length;
-        int width = output[0][0].length;
-        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int r = Math.min(255, Math.max(0, (int)(output[0][y][x][0] * 255)));
-                int g = Math.min(255, Math.max(0, (int)(output[0][y][x][1] * 255)));
-                int b = Math.min(255, Math.max(0, (int)(output[0][y][x][2] * 255)));
-                int color = 0xFF << 24 | (r << 16) | (g << 8) | b;
-                bmp.setPixel(x, y, color);
-            }
-        }
-        return bmp;
     }
 
     private void processCapturedImage() {

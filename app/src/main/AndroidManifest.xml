@@ -8,8 +8,8 @@
 
     <application
         android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_icon2"
+        android:roundIcon="@mipmap/ic_icon2_round"
         android:allowBackup="true"
         android:theme="@style/Theme.CheckInset.Light">
 
@@ -23,7 +23,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Base.Theme.CheckInset.Light"
+            android:theme="@style/Theme.CheckInset.Light"
             android:exported="true"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>

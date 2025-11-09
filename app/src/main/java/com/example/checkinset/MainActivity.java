@@ -13,10 +13,12 @@ import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -30,6 +32,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.*;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -56,6 +60,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.json.JSONException;
+
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 public class MainActivity extends AppCompatActivity implements ImageManager.ImageResultCallback {
 
@@ -104,7 +111,21 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+        Window window = getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorBackgroundStatusNavi));
+        }
+
+        // Icons hell oder dunkel?
+        WindowInsetsControllerCompat controller =
+                new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
+        controller.setAppearanceLightStatusBars(true); // true = black icons
+        controller.setAppearanceLightNavigationBars(true); // true = black icons
 
         //Check for updates
         checker = new UpdateChecker(this, this.getString(R.string.app_vers));
@@ -125,6 +146,20 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         // Bottom Sheet Komponenten
         LinearLayout bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheet.setBackground(ContextCompat.getDrawable(this, R.drawable.bottom_sheet_background));
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED ||
+                        bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HALF_EXPANDED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                } else {
+                    // kein BottomSheet offen → normale Back-Aktion
+                    setEnabled(false);
+                    onBackPressed();
+                }
+            }
+        });
 
         tvCircleNumber = findViewById(R.id.tvCircleNumber);
         tvTimestamp = findViewById(R.id.tvTimestamp);
@@ -437,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             addImageToUI(img);
         }
 
-        showPointDetails(currentPoint, currentLayout);
+        //showPointDetails(currentPoint, currentLayout);
     }
 
     public void updateDataModel(DataModel newModel) {
@@ -527,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         TextView titleView = new TextView(this, null, 0, R.style.ImageTitle);
         titleView.setText(imageModel.title);
         titleView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_corners_image_title));
-        titleView.setPadding(16, 16, 16, 16); // Padding für besseren Abstand
+        titleView.setPadding(16, 8, 16, 16); // Padding für besseren Abstand
 
         // Layout-Parameter für die Positionierung der Überschrift
         FrameLayout.LayoutParams titleLayoutParams = new FrameLayout.LayoutParams(
@@ -544,7 +579,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         // CustomImageLayout in den Container einfügen
         LinearLayout containerLayout = new LinearLayout(this);
         containerLayout.setOrientation(LinearLayout.VERTICAL);
-        containerLayout.setPadding(0, 16, 0, 16);
+        containerLayout.setPadding(0, 20, 0, 0);
         containerLayout.addView(customLayout, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -594,24 +629,6 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         // Wähle ein View als Parent, z. B. die Root-Layout ID
         View coordinator = findViewById(R.id.coordinatorLayout);
         showCoffeeDonationSnackbar(coordinator);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (bottomSheetBehavior == null) {
-            super.onBackPressed();
-            return;
-        }
-        int state = bottomSheetBehavior.getState();
-        // Use logical OR (||) and handle the HIDDEN state for a better UX.
-        if (state == BottomSheetBehavior.STATE_EXPANDED
-                || state == BottomSheetBehavior.STATE_HALF_EXPANDED
-                || state == BottomSheetBehavior.STATE_HIDDEN) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            refreshAllPoints();
-            return; // Prevent the activity/fragment from closing.
-        }
-        super.onBackPressed();
     }
 
     private void createPoint(CustomImageLayout layout, float xPercent, float yPercent) {
