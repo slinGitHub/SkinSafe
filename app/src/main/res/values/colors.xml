@@ -7,8 +7,8 @@
     <!--    <color name="colorBackground">#FFE6E1E5</color> <color name="colorBackground">#FFFEF7FF</color>-->
     <!-- <color name="colorBackground">#FEF6FC</color> -->
     <!--  <color name="colorBackground">#FEF7FF</color>-->
-    <color name="colorBackground">#E8DBE8</color>
-    <color name="colorBackgroundStatusNavi">#E8DBE8</color>
+    <color name="colorBackground">#FFFFFBFF</color>
+    <color name="colorBackgroundStatusNavi">#FFFFFBFF</color>
     <color name="colorSecondaryBlackText">#FF444444</color>
 
     <!--    Circle colors-->

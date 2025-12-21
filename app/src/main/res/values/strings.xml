@@ -18,7 +18,8 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="hyperlink"><a href="https://slingithub.github.io/SkinSafe/">slingithub.github.io/SkinSafe</a></string>
+    <string name="hyperlinkSkinSafeWeb"><a href="https://slingithub.github.io/SkinSafeWeb/">slingithub.github.io/SkinSafeWeb</a></string>
+    <string name="hyperlinkPrivacyPolicy"><a href="https://slingithub.github.io/SkinSafeWeb/privacyPolicy.html">slingithub.github.io/SkinSafeWeb/privacyPolicy</a></string>
 
     <!-- UpdateChecker -->
     <string name="update_available_title">Update available</string>
