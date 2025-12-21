@@ -1,4 +1,4 @@
-package com.example.checkinset;
+package de.skinsafe.app;
 
 
 import android.content.Context;
@@ -26,10 +26,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import com.example.checkinset.model.DataModel;
-import com.example.checkinset.model.ImageModel;
-import com.example.checkinset.model.PointModel;
-import com.example.checkinset.model.DataStorage;
+import de.skinsafe.app.model.DataModel;
+import de.skinsafe.app.model.ImageModel;
+import de.skinsafe.app.model.PointModel;
+import de.skinsafe.app.model.DataStorage;
 
 public class DataIOManager {
     private Context context;

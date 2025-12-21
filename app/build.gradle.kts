@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.checkinset"
+    namespace = "de.skinsafe.app"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.checkinset"
+        applicationId = "de.skinsafe.app"
         minSdk = 28
         targetSdk = 36
         versionCode = 1

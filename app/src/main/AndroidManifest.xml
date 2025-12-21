@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.checkinset">
+    package="de.skinsafe.app">
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
@@ -13,16 +13,16 @@
         android:allowBackup="true"
         android:theme="@style/Theme.CheckInset.Light">
 
-        <activity android:name=".SettingsAboutActivity"
+        <activity android:name="de.skinsafe.app.SettingsAboutActivity"
             android:label="Settings About"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="de.skinsafe.app.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value="de.skinsafe.app.MainActivity"/>
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name="de.skinsafe.app.MainActivity"
             android:theme="@style/Theme.CheckInset.Light"
             android:exported="true"
             android:windowSoftInputMode="adjustResize|stateHidden">
@@ -42,7 +42,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".SettingsActivity" />
+        <activity android:name="de.skinsafe.app.SettingsActivity" />
 
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.checkinset.model;
+package de.skinsafe.app.model;
 
 import android.content.Context;
 

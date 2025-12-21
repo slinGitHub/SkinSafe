@@ -1,4 +1,4 @@
-package com.example.checkinset;
+package de.skinsafe.app;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -44,10 +44,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
-import com.example.checkinset.model.DataModel;
-import com.example.checkinset.model.ImageModel;
-import com.example.checkinset.model.PointModel;
-import com.example.checkinset.model.DataStorage;
+import de.skinsafe.app.model.DataModel;
+import de.skinsafe.app.model.ImageModel;
+import de.skinsafe.app.model.PointModel;
+import de.skinsafe.app.model.DataStorage;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -61,7 +61,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import org.json.JSONException;
 
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 public class MainActivity extends AppCompatActivity implements ImageManager.ImageResultCallback {
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
     private static final String PREFS_NAME = "donation_prefs";
     private static final String KEY_LAST_SHOWN = "donation_last_shown";
 
-    private UpdateChecker checker;
+//  private UpdateChecker checker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +127,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         controller.setAppearanceLightNavigationBars(true); // true = black icons
 
         //Check for updates
-        checker = new UpdateChecker(this, this.getString(R.string.app_vers));
-        checker.checkForUpdate(false);
+//        checker = new UpdateChecker(this, this.getString(R.string.app_vers));
+//        checker.checkForUpdate(false);
 
         // Toolbar initialisieren
         Toolbar topAppBar = findViewById(R.id.topAppBar);
@@ -382,9 +381,9 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             item.setIcon(protectedViewOn ? R.drawable.ic_wappen_on : R.drawable.ic_wappen_off);
             loadUIFromDataModel();
             return true;
-        } else if (item.getItemId() == R.id.check_for_updates) {
-            checker.checkForUpdate(true);
-            return true;
+//        } else if (item.getItemId() == R.id.check_for_updates) {
+//            checker.checkForUpdate(true);
+//            return true;
         } else if (item.getItemId() == R.id.action_aboutSkinSafe) {
             Intent intent_settings_about = new Intent(this, SettingsAboutActivity.class);
             startActivity(intent_settings_about);
@@ -992,7 +991,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         long lastShown = prefs.getLong(KEY_LAST_SHOWN, 0);
         long now = System.currentTimeMillis();
-        long threeMonthsMillis = 1000L * 60; // * 60 * 24 * 30 * 3; // ca. 3 Monate
+        long threeMonthsMillis = 1000L * 60 * 60 * 24 * 30 * 3; // * 60 * 24 * 30 * 3; // ca. 3 Monate
         return now - lastShown > threeMonthsMillis;
     }
 

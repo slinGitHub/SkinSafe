@@ -1,4 +1,4 @@
-package com.example.checkinset.model;
+package de.skinsafe.app.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,6 @@ import java.util.List;
  * Enthält eine Liste aller gespeicherten Bilder.
  */
 public class DataModel {
-    public List<com.example.checkinset.model.ImageModel> images = new ArrayList<>();
+    public List<ImageModel> images = new ArrayList<>();
 }
 

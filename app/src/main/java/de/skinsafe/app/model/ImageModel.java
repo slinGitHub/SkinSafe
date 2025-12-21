@@ -1,4 +1,4 @@
-package com.example.checkinset.model;
+package de.skinsafe.app.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,6 @@ public class ImageModel {
     public String originalImagePath;   // z.B. currentPhotoPath
     public String cartoonImagePath;
     public String title;  // Überschrift
-    public List<com.example.checkinset.model.PointModel> points = new ArrayList<>();
+    public List<PointModel> points = new ArrayList<>();
 }
 

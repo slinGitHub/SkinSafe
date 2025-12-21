@@ -1,4 +1,4 @@
-package com.example.checkinset;
+package de.skinsafe.app;
 
 import android.content.Intent;
 import android.net.Uri;

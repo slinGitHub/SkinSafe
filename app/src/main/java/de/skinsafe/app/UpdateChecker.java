@@ -1,4 +1,4 @@
-package com.example.checkinset;
+package de.skinsafe.app;
 
 import android.app.AlertDialog;
 import android.content.Context;

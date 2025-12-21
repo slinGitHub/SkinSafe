@@ -38,11 +38,11 @@
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/check_for_updates"
-        android:title="@string/check_for_updates"
-        android:icon="@android:drawable/ic_menu_delete"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/check_for_updates"-->
+<!--        android:title="@string/check_for_updates"-->
+<!--        android:icon="@android:drawable/ic_menu_delete"-->
+<!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_aboutSkinSafe"

@@ -1,4 +1,4 @@
-package com.example.checkinset;
+package de.skinsafe.app;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

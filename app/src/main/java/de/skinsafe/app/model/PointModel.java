@@ -1,4 +1,4 @@
-package com.example.checkinset.model;
+package de.skinsafe.app.model;
 
 /**
  * Repräsentiert einen gesetzten Punkt auf dem Bild.

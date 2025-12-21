@@ -1,15 +1,11 @@
-package com.example.checkinset;
-
-import static androidx.core.app.ActivityCompat.startActivityForResult;
+package de.skinsafe.app;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
