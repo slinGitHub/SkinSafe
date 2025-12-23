@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.exifinterface.media.ExifInterface;
@@ -104,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
     private static final String PREFS_NAME = "donation_prefs";
     private static final String KEY_LAST_SHOWN = "donation_last_shown";
+
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher;
+
 
 //  private UpdateChecker checker;
 
@@ -338,6 +342,22 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         } else {
             Log.w("MainActivity", "Keine ActionBar vorhanden – Icon nicht gesetzt");
         }
+
+        pickMediaLauncher = registerForActivityResult(
+                new ActivityResultContracts.PickVisualMedia(),
+                uri -> {
+                    if (uri != null) {
+                        String copiedPath = imageManager.copyImageToAppStorage(uri);
+                        if (copiedPath != null) {
+                            imageManager.handleActivityResult(ImageManager.REQUEST_PICK_IMAGE, RESULT_OK, new Intent().setData(uri));
+                        } else {
+                            onError("Fehler beim Kopieren des Bildes.");
+                        }
+                    }
+                }
+        );
+
+
     }
 
     @Override
@@ -451,8 +471,12 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
             if (fromCamera) {
                 imageManager.checkCameraPermissionAndOpenCamera();
             } else {
-                imageManager.openGallery();
-            }
+                    pickMediaLauncher.launch(
+                            new PickVisualMediaRequest.Builder()
+                                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                    .build()
+                    );
+                }
         });
 
 

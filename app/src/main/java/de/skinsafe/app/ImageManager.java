@@ -106,7 +106,7 @@ public class ImageManager {
             }
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(activity,
-                        "com.example.checkinset.fileprovider",
+                        "de.skinsafe.app.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 activity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
