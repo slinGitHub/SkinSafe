@@ -1000,8 +1000,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
         setLastShownSnackbar(); // optional
 
-        snackbar.setAction("DONATE 5$", v -> {
-            String url = "https://www.paypal.com/donate?hosted_button_id=CF3AHXTKNARRL";
+        snackbar.setAction("DONATE", v -> {
+            String url = "https://www.paypal.com/ncp/payment/WY7DJ55SGCU6E";
             parentView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             snackbar.dismiss();
         });
@@ -1015,7 +1015,7 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         long lastShown = prefs.getLong(KEY_LAST_SHOWN, 0);
         long now = System.currentTimeMillis();
-        long threeMonthsMillis = 1000L * 60 * 60 * 24 * 30 * 3; // * 60 * 24 * 30 * 3; // ca. 3 Monate
+        long threeMonthsMillis = 1000L * 60 * 60 * 24 * 30 * 3; // ca. 3 Monate
         return now - lastShown > threeMonthsMillis;
     }
 

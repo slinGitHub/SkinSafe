@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SkinSafe</string>
-    <string name="app_vers">v0.1 beta</string>
+    <string name="app_vers">v0.2 beta</string>
     <string name="action_settings">Settings</string>
 
     <!-- Settings Menue -->
@@ -18,8 +18,12 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="hyperlinkSkinSafeWeb"><a href="https://slingithub.github.io/SkinSafeWeb/">slingithub.github.io/SkinSafeWeb</a></string>
-    <string name="hyperlinkPrivacyPolicy"><a href="https://slingithub.github.io/SkinSafeWeb/privacyPolicy.html">slingithub.github.io/SkinSafeWeb/privacyPolicy</a></string>
+    <string name="hyperlinkSkinSafeSourceCode"><a href="https://github.com/slinGitHub/SkinSafe">SkinSafe Github Repo Source Code</a></string>
+    <string name="hyperlinkSkinSafeWeb"><a href="https://slingithub.github.io/SkinSafeWeb/">SkinSafe Github Landing Page</a></string>
+    <string name="hyperlinkPrivacyPolicy"><a href="https://slingithub.github.io/SkinSafeWeb/privacyPolicy.html">SkinSafe Privacy Policy</a></string>
+    <string name="paypal_url">https://www.paypal.com/ncp/payment/WY7DJ55SGCU6E</string>
+    <string name="hyperlinkPaypalDonate"><a href="@string/paypal_url">Donate with Paypal</a></string>
+
 
     <!-- UpdateChecker -->
     <string name="update_available_title">Update available</string>
@@ -45,7 +49,7 @@
     <string name="about_page_visit_the_skinsafe_project_page">Visit the SkinSafe project page</string>
     <string name="about_page_skinsafe">SkinSafe</string>
     <string name="about_page_donate_via_paypal">Donate via Paypal ❤️</string>
-    <string name="about_page_by_n_b_2025">by N. B., 2025</string>
+    <string name="about_page">by N. B., 2026</string>
     <string name="top_app_bar_switch_history">Switch History</string>
     <string name="top_app_bar_toggle_protected_images">Toggle Protected Images</string>
 

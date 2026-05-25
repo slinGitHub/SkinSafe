@@ -10,8 +10,8 @@ android {
         applicationId = "de.skinsafe.app"
         minSdk = 28
         targetSdk = 36
-        versionCode = 1
-        versionName = "O.1 beta"
+        versionCode = 6
+        versionName = "SkinSafe vO.06 beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

@@ -77,6 +77,22 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        android:id="@+id/hyperSkinSafeSourceCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/hyperlinkSkinSafeSourceCode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linkToCheckInset"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+
+    <TextView
         android:id="@+id/hyperlinkPrivacyPolicy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +103,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linkToCheckInset"
+        app:layout_constraintTop_toBottomOf="@+id/hyperSkinSafeSourceCode"
         app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.button.MaterialButton
@@ -108,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/about_page_by_n_b_2025"
+        android:text="@string/about_page"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/buttonDonate"
         app:layout_constraintStart_toStartOf="parent"

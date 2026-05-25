@@ -1,6 +1,7 @@
 package de.skinsafe.app;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -21,10 +22,26 @@ public class SettingsAboutActivity extends AppCompatActivity
         // Donate Button öffnen
         MaterialButton donateButton = findViewById(R.id.buttonDonate);
         donateButton.setOnClickListener(v -> {
-            String url = "https://www.paypal.com/donate?hosted_button_id=CF3AHXTKNARRL";
+            String url = "https://www.paypal.com/ncp/payment/WY7DJ55SGCU6E";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
         });
+
+        //Get Build Version Name for About SkinSafe page
+        TextView tvVersion = findViewById(R.id.textVersion);
+        if (tvVersion != null) {
+            try {
+                String versionName = getPackageManager()
+                        .getPackageInfo(getPackageName(), 0).versionName;
+
+                tvVersion.setText(
+                        getString(R.string.app_vers, versionName)
+                );
+
+            } catch (PackageManager.NameNotFoundException e) {
+                tvVersion.setText("Version unbekannt");
+            }
+        }
 
         //Activate Hyperlink at About Checkmate Screen
         setupHyperlink();
