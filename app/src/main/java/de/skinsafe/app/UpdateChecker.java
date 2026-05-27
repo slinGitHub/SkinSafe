@@ -23,11 +23,12 @@ import java.util.concurrent.Executors;
 public class UpdateChecker {
 
     private static final String TAG = "UpdateChecker";
-    private static final String VERSION_URL = "https://raw.githubusercontent.com/slinGitHub/CheckInset/master/latest.json";
+    private static final String VERSION_URL = "https://api.github.com/repos/slinGitHub/SkinSafe/releases/latest";
 
     private static final String PREFS_NAME = "update_checker_prefs";
     private static final String PREF_LAST_CHECK = "last_check_time";
-    private static final long THIRTY_DAYS_MILLIS = 30L * 24 * 60 * 60 * 1000; // 30 days
+    private static final long CHECK_INTERVAL_MILLIS = 7L * 24 * 60 * 60 * 1000; // 7 days
+
 
     private final Context context;
     private final String currentVersion;
@@ -48,7 +49,7 @@ public class UpdateChecker {
         long lastCheck = prefs.getLong(PREF_LAST_CHECK, 0);
         long now = System.currentTimeMillis();
 
-        if (!manualCheck && (now - lastCheck < THIRTY_DAYS_MILLIS)) {
+        if (!manualCheck && (now - lastCheck < CHECK_INTERVAL_MILLIS)) {
             Log.d(TAG, "Skipping update check (last check < 30 days ago).");
             return;
         }
@@ -71,13 +72,26 @@ public class UpdateChecker {
                 String jsonString = result.toString();
                 Log.d(TAG, "Server response: " + jsonString);
 
-                JSONObject json = new JSONObject(jsonString);
-                String latestVersion = json.getString("latestVersion");
-                String downloadUrl = json.getString("downloadUrl");
+                JSONObject json = new JSONObject(result.toString());
+
+                // Asset-Array auslesen
+                org.json.JSONArray assets = json.getJSONArray("assets");
+                String assetName = assets.getJSONObject(0).getString("name");
+                // → "SkinSafeV02.apk"
+
+                // Versionsnummer extrahieren: "SkinSafeV02.apk" → "02"
+                String latestVersion = assetName
+                        .replace("SkinSafe", "")   // → "V02.apk"
+                        .replace("V", "")          // → "02.apk"
+                        .replace(".apk", "");      // → "02"
+
+                String downloadUrl = assets.getJSONObject(0)
+                        .getString("browser_download_url");
 
                 handler.post(() -> {
                     if (!currentVersion.equals(latestVersion)) {
-                        showUpdateDialog(latestVersion, downloadUrl);
+                        //showUpdateDialog(latestVersion, downloadUrl);
+                        UIUtils.showUpdateDialog(context, latestVersion, "https://github.com/slingithub/SkinSafe/releases");
                     } else if (manualCheck) {
                         // Only show "up to date" if user triggered the check
                         Toast.makeText(context, "App is up to date", Toast.LENGTH_SHORT).show();
@@ -98,17 +112,17 @@ public class UpdateChecker {
         });
     }
 
-    private void showUpdateDialog(String latestVersion, String downloadUrl) {
-        new AlertDialog.Builder(context)
-                .setTitle("Update available")
-                .setMessage("A new version (" + latestVersion + ") of the app is available.")
-                .setPositiveButton("Download", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                        context.startActivity(browserIntent);
-                    }
-                })
-                .setNegativeButton("Later", null)
-                .show();
-    }
+//    private void showUpdateDialog(String latestVersion, String downloadUrl) {
+//        new AlertDialog.Builder(context)
+//                .setTitle("Update available")
+//                .setMessage("A new version " + latestVersion + " of SkinSafe is available.")
+//                .setPositiveButton("Download", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+//                        context.startActivity(browserIntent);
+//                    }
+//                })
+//                .setNegativeButton("Later", null)
+//                .show();
+//    }
 }

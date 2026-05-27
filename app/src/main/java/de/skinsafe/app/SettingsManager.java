@@ -26,4 +26,15 @@ public class SettingsManager {
         }
     }
 
+    /**
+     * Prüft, ob der automatische Update-Check aktiviert ist.
+     * @param context Der Kontext der App
+     * @return true, wenn aktiviert, standardmäßig true
+     */
+    public static boolean isUpdateCheckEnabled(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        // "update_check_enabled" muss mit dem 'key' in deiner preferences.xml übereinstimmen
+        return prefs.getBoolean("update_check_enabled", true);
+    }
+
 }

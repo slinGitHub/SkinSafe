@@ -29,6 +29,13 @@
             android:icon="@drawable/ic_max_points_history_view"
              app:useSimpleSummaryProvider="true"/>
 
+        <SwitchPreferenceCompat
+            app:key="update_check_enabled"
+            app:title="Check for updates"
+            android:icon="@drawable/outline_heart_check_24"
+            app:summary="Check for app updates during startup every 7 days."
+            app:defaultValue="true" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

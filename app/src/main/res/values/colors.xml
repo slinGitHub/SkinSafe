@@ -10,6 +10,7 @@
     <color name="colorBackground">#FFFFFBFF</color>
     <color name="colorBackgroundStatusNavi">#FFFFFBFF</color>
     <color name="colorSecondaryBlackText">#FF444444</color>
+    <color name="colorBackgroundNotifications">#ece6f0</color>
 
     <!--    Circle colors-->
     <color name="circleBackgroundGreen">#FFB4DEB6</color>

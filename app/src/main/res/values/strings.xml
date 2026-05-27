@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SkinSafe</string>
-    <string name="app_vers">v0.2 beta</string>
+    <string name="app_vers">0.02</string>
     <string name="action_settings">Settings</string>
 
     <!-- Settings Menue -->
@@ -46,11 +46,15 @@
     <string name="no_date_found">No Date found..</string>
     <string name="place_holder_rate_your_exp">" "</string>
     <string name="add_your_notes_here">Add your notes here..</string>
+
+    <!-- About SkinSafe sheet-->
+    <string name="button_check_for_updates">Check for Updates</string>
     <string name="about_page_visit_the_skinsafe_project_page">Visit the SkinSafe project page</string>
-    <string name="about_page_skinsafe">SkinSafe</string>
+    <string name="about_page_skinsafe">SKIN SAFE</string>
     <string name="about_page_donate_via_paypal">Donate via Paypal ❤️</string>
     <string name="about_page">by N. B., 2026</string>
     <string name="top_app_bar_switch_history">Switch History</string>
     <string name="top_app_bar_toggle_protected_images">Toggle Protected Images</string>
+    <string name="show_welcome_screen">Show welcome screen</string>
 
 </resources>

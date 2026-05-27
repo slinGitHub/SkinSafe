@@ -13,14 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="12dp"
-        app:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
         android:background="@color/colorBackgroundStatusNavi"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:title=" SKIN SAFE"
         android:layout_gravity="top"
         app:titleTextAppearance="@style/ToolbarTitleBold"
-        android:titleTextColor="@color/DarkColor1" />
+        android:titleTextColor="@color/DarkColor1"
+        app:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"/>
 
     <!-- Hauptinhalt: Ein vertikales Layout mit ScrollView -->
     <LinearLayout

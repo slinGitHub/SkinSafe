@@ -1,136 +1,289 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:fitsSystemWindows="true"
     tools:context="de.skinsafe.app.SettingsAboutActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/skinsafe_logo"
-        app:layout_constraintBottom_toTopOf="@+id/textCheckmate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@mipmap/ic_icon2" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textVersion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/app_vers"
-        app:layout_constraintBottom_toTopOf="@+id/textAbout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCheckmate" />
+        <!-- ── Header ── -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
 
-    <TextView
-        android:id="@+id/textAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:textAlignment="center"
-        android:text="@string/about_page_visit_the_skinsafe_project_page"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVersion" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:background="@color/colorBackground">
 
-    <TextView
-        android:id="@+id/textCheckmate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/about_page_skinsafe"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textVersion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:contentDescription="@string/skinsafe_logo"
+                    app:srcCompat="@mipmap/ic_icon2" />
 
-    <TextView
-        android:id="@+id/linkToCheckInset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/hyperlinkSkinSafeWeb"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textAbout"
-        app:layout_constraintVertical_bias="0.0" />
+                <TextView
+                    android:id="@+id/textVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/app_vers"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="@color/DarkColor1" />
 
-    <TextView
-        android:id="@+id/hyperSkinSafeSourceCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/hyperlinkSkinSafeSourceCode"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linkToCheckInset"
-        app:layout_constraintVertical_bias="0.0" />
+                <TextView
+                    android:id="@+id/textCheckmate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/about_page_skinsafe"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/AboutPageSkinSafeTitle"
+                    android:textColor="@color/DarkColor1" />
+
+                <TextView
+                    android:id="@+id/textAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/about_page"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="@color/DarkColor1" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Donate Card ── -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/colorBackgroundNotifications"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Support SkinSafe"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:textColor="?attr/colorOnSecondaryContainer" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="No ads. No subscriptions. If SkinSafe helps you, a coffee keeps it free."
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:alpha="0.8" />
+
+                <!-- Amount Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp"
+                    android:weightSum="3">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonDonate1"
+                        style="@style/Widget.Material3.Button.ElevatedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:text="€2" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonDonate2"
+                        style="@style/Widget.Material3.Button.ElevatedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:text="€5" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonDonate3"
+                        style="@style/Widget.Material3.Button.ElevatedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:text="€10" />
+
+                </LinearLayout>
+
+                <!-- PayPal Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonDonate"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_page_donate_via_paypal"
+                    app:iconTint="?attr/colorPrimary"
+                    app:iconPadding="8dp"
+                    app:cornerRadius="12dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Links Card ── -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@color/colorBackground">
+
+                <TextView
+                    android:id="@+id/textAbout"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/about_page_visit_the_skinsafe_project_page"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:background="?attr/selectableItemBackground" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="20dp"
+                    android:background="?attr/colorOutlineVariant" />
+
+                <TextView
+                    android:id="@+id/linkToCheckInset"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/hyperlinkSkinSafeWeb"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/outline_arrow_forward_ios_24"
+                    android:drawablePadding="8dp"
+                    app:drawableTint="?attr/colorPrimary" />
 
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="20dp"
+                    android:background="?attr/colorOutlineVariant" />
 
-    <TextView
-        android:id="@+id/hyperlinkPrivacyPolicy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/hyperlinkPrivacyPolicy"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hyperSkinSafeSourceCode"
-        app:layout_constraintVertical_bias="0.0" />
+                <TextView
+                    android:id="@+id/hyperSkinSafeSourceCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/hyperlinkSkinSafeSourceCode"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/outline_arrow_forward_ios_24"
+                    android:drawablePadding="8dp"
+                    app:drawableTint="?attr/colorPrimary"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonDonate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/about_page_donate_via_paypal"
-        android:layout_marginTop="16dp"
-        app:iconTint="?attr/colorPrimary"
-        app:iconPadding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/hyperlinkPrivacyPolicy"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.Material3.Button.ElevatedButton" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="20dp"
+                    android:background="?attr/colorOutlineVariant" />
 
-    <TextView
-        android:id="@+id/ByNB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/about_page"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/buttonDonate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0" />
+                <TextView
+                    android:id="@+id/hyperlinkPrivacyPolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/hyperlinkPrivacyPolicy"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/outline_arrow_forward_ios_24"
+                    android:drawablePadding="8dp"
+                    app:drawableTint="?attr/colorPrimary"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="20dp"
+                    android:background="?attr/colorOutlineVariant" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/showWelcomeScreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/show_welcome_screen"
+                    android:textColor = "?attr/colorPrimary"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableStart="@drawable/outline_arrow_forward_ios_24"
+                    android:drawablePadding="8dp"
+                    app:drawableTint="?attr/colorPrimary"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Footer Row ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"> <!-- Etwas mehr Abstand nach oben -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonCheckForUpdates"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_check_for_updates" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,4 +1,16 @@
 <resources>
+    <style name="Theme.SkinSafe" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- ... andere Farben ... -->
+
+        <!-- Overflow-Menü Style überschreiben -->
+        <item name="popupMenuStyle">@style/Widget.SkinSafe.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.SkinSafe.PopupMenu</item>
+    </style>
+
+    <style name="Widget.SkinSafe.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@color/colorBackgroundNotifications</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="Theme.CheckInset.Light" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -22,4 +34,5 @@
         <item name="dynamicColorThemeOverlay">@null</item>
 
     </style>
+
 </resources>

@@ -108,8 +108,10 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
     private ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher;
 
+    private static final String KEY_FIRST_START_DONE = "first_start_done";
 
-//  private UpdateChecker checker;
+
+  private UpdateChecker checker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,8 +133,10 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         controller.setAppearanceLightNavigationBars(true); // true = black icons
 
         //Check for updates
-//        checker = new UpdateChecker(this, this.getString(R.string.app_vers));
-//        checker.checkForUpdate(false);
+        if (SettingsManager.isUpdateCheckEnabled(this)) {
+            checker = new UpdateChecker(this, this.getString(R.string.app_vers));
+            checker.checkForUpdate(false);
+        }
 
         // Toolbar initialisieren
         Toolbar topAppBar = findViewById(R.id.topAppBar);
@@ -357,6 +361,8 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
                 }
         );
 
+        //Start welcome Message box if first start
+        checkFirstStart();
 
     }
 
@@ -1057,6 +1063,50 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
 
             btn.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, color)));
         }
+    }
+
+    private void checkFirstStart() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        // Prüfen, ob der erste Start bereits erledigt wurde
+        if (!prefs.getBoolean(KEY_FIRST_START_DONE, false)) {
+
+            // Aufruf der zentralen Utility-Methode
+            UIUtils.showWelcomeDialog(this);
+
+            // WICHTIG: Direkt als erledigt markieren, damit er nicht bei jedem
+            // App-Wechsel/Rotation erneut erscheint
+            markFirstStartDone();
+        }
+    }
+
+//    private void showWelcomeDialog() {
+//        String welcomeMessage = "Track your catheter positions and protect your skin with ease.\n\n" +
+//                "• Maximum Data Privacy: All your data stays on your phone.\n\n" +
+//                "• No cloud, no data sharing: The integrated TFLite GAN model " +
+//                "cartoonifies your images directly on your device.\n\n" +
+//                "Explore all features like History tracking and position visualization on the project page.";
+//
+//        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+//                .setTitle("Welcome to SkinSafe!")
+//                .setMessage(welcomeMessage)
+//                .setPositiveButton("Visit Guide", (dialog, which) -> {
+//                    markFirstStartDone();
+//                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://slingithub.github.io/SkinSafeWeb/")));
+//                })
+//                .setNegativeButton("Got it", (dialog, which) -> {
+//                    markFirstStartDone();
+//                    dialog.dismiss();
+//                })
+//                .setCancelable(false)
+//                .show();
+//    }
+
+    private void markFirstStartDone() {
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                .edit()
+                .putBoolean(KEY_FIRST_START_DONE, true)
+                .apply();
     }
 
 }
