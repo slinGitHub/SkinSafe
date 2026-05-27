@@ -1,5 +1,6 @@
 package de.skinsafe.app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +16,7 @@ public class SettingsAboutActivity extends AppCompatActivity
 {
     private UpdateChecker checker;
 
+    @SuppressLint("StringFormatInvalid")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
