@@ -11,7 +11,7 @@ android {
         minSdk = 28
         targetSdk = 36
         versionCode = 6
-        versionName = "SkinSafe vO.06 beta"
+        versionName = "V0.02"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -37,6 +37,15 @@ android {
         }
 
     }
+
+    android {
+        // ...
+        buildFeatures {
+            viewBinding = true
+            buildConfig = true // Diese Zeile hinzufügen!
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

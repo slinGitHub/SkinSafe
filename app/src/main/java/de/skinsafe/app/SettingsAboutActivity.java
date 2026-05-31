@@ -62,17 +62,7 @@ public class SettingsAboutActivity extends AppCompatActivity
         //Get Build Version Name for About SkinSafe page
         TextView tvVersion = findViewById(R.id.textVersion);
         if (tvVersion != null) {
-            try {
-                String versionName = getPackageManager()
-                        .getPackageInfo(getPackageName(), 0).versionName;
-
-                tvVersion.setText(
-                        getString(R.string.app_vers, versionName)
-                );
-
-            } catch (PackageManager.NameNotFoundException e) {
-                tvVersion.setText("Version unbekannt");
-            }
+            tvVersion.setText(BuildConfig.VERSION_NAME);
         }
 
         //Activate Hyperlink at About Checkmate Screen

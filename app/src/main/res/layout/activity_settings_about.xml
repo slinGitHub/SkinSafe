@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/app_vers"
+                    android:text="N/A"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="@color/DarkColor1" />
 
@@ -90,7 +90,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Support SkinSafe"
+                    android:text="Support SkinSafe ❤️"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
                     android:textColor="?attr/colorOnSecondaryContainer" />
 
@@ -99,8 +99,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="16dp"
-                    android:text="No ads. No subscriptions. If SkinSafe helps you, a coffee keeps it free."
-                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:text="No ads. No subscriptions. If SkinSafe helps you, a coffee via Paypal keeps it free:"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     android:alpha="0.8" />
 

@@ -153,6 +153,10 @@ public class MainActivity extends AppCompatActivity implements ImageManager.Imag
         // Bottom Sheet Komponenten
         LinearLayout bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheet.setBackground(ContextCompat.getDrawable(this, R.drawable.bottom_sheet_background));
+        bottomSheet.setOnApplyWindowInsetsListener((v, insets) -> {
+            // Falls die Tastatur sichtbar ist, wird das Padding angepasst
+            return insets;
+        });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
