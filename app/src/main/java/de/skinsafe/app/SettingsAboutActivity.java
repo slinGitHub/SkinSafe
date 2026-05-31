@@ -25,7 +25,7 @@ public class SettingsAboutActivity extends AppCompatActivity
         // Check for Updates Button
         MaterialButton updateButton = findViewById(R.id.buttonCheckForUpdates);
         updateButton.setOnClickListener(v -> {
-            checker = new UpdateChecker(this, this.getString(R.string.app_vers));
+            checker = new UpdateChecker(this, BuildConfig.VERSION_NAME);
             checker.checkForUpdate(true);
         });
 
